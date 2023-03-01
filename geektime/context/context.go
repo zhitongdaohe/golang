@@ -10,7 +10,7 @@ import (
 func main() {
 	coordinateWithContext()
 
-	deadline()
+	withDeadline()
 }
 
 func coordinateWithContext() {
@@ -35,7 +35,7 @@ func addNum(num *int32, val int, max int32, f func()) {
 func withDeadline() {
 	ctx := context.Background()
 
-	ctx, _ = context.WithDeadline(ctx, time.Now().Add(time.Second*10))
+	ctx, cancelFunc := context.WithDeadline(ctx, time.Now().Add(time.Second*10))
 
 	go func(ctx context.Context) {
 		i := 0
@@ -47,4 +47,6 @@ func withDeadline() {
 	}(ctx)
 
 	<-ctx.Done()
+
+	cancelFunc()
 }
